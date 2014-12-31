@@ -1,7 +1,7 @@
 'use strict';
 
 var KindaClass = require('kinda-class');
-var util = require('kinda-util').create();
+var log = require('kinda-log').create();
 var httpClient = require('kinda-http-client').create();
 
 var Auth = KindaClass.extend('Auth', function() {
@@ -54,7 +54,7 @@ var Auth = KindaClass.extend('Auth', function() {
     try {
       yield httpClient.del({ url: url, json: false });
     } catch (err) {
-      util.error(err);
+      log.error(err);
     }
     this.token = undefined;
   };
