@@ -17,8 +17,8 @@
   "author": "Manuel Vila <mvila@3base.com>",
   "license": "MIT",
   "dependencies": {
-    "kinda-class": "kinda/kinda-class",
-    "kinda-http-client": "kinda/kinda-http-client",
-    "kinda-log": "kinda/kinda-log"
+    "kinda-class": "^0.3.0",
+    "kinda-http-client": "^0.1.0",
+    "kinda-log": "^0.1.0"
   }
 }
