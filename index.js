@@ -36,7 +36,7 @@ var Auth = KindaClass.extend('Auth', function() {
     if (!token) throw new Error('token is missing');
     var url = this.baseURL + '/tokens/' + token;
     var res = yield httpClient.get(url);
-    if (res.statusCode === 403) return false;
+    if (res.statusCode === 404) return false;
     if (res.statusCode !== 200)
       throw new Error('unexpected HTTP status code (' + res.statusCode + ')');
     var item = res.body;
