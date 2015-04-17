@@ -5,12 +5,12 @@ var log = require('kinda-log').create();
 var httpClient = require('kinda-http-client').create();
 
 var Auth = KindaClass.extend('Auth', function() {
-  Object.defineProperty(this, 'token', {
+  Object.defineProperty(this, 'authorization', {
     get: function() {
-      return this._token;
+      return this._authorization;
     },
-    set: function(token) {
-      this._token = token;
+    set: function(authorization) {
+      this._authorization = authorization;
     }
   });
 
@@ -28,35 +28,35 @@ var Auth = KindaClass.extend('Auth', function() {
     var item = res.body;
     if (!item.id)
       throw new Error('assertion error (!item.id)');
-    this.token = item.id;
+    this.authorization = item.id;
     return item;
   };
 
-  this.signInWithToken = function *(token) {
-    if (!token) throw new Error('token is missing');
-    var url = this.baseURL + '/tokens/' + token;
+  this.signInWithPreviousAuthorization = function *(authorization) {
+    if (!authorization) throw new Error('authorization is missing');
+    var url = this.baseURL + '/tokens/' + authorization;
     var res = yield httpClient.get(url);
     if (res.statusCode === 404) return false;
     if (res.statusCode !== 200)
       throw new Error('unexpected HTTP status code (' + res.statusCode + ')');
     var item = res.body;
-    if (item.id !== token)
-      throw new Error('assertion error (item.id !== token)');
+    if (item.id !== authorization)
+      throw new Error('assertion error (item.id !== authorization)');
     if (item.expirationTime != null)
       if (item.expirationTime <= 0) return false;
-    this.token = token;
+    this.authorization = authorization;
     return item;
   };
 
   this.signOut = function *() {
-    if (!this.token) return;
-    var url = this.baseURL + '/tokens/' + this.token;
+    if (!this.authorization) return;
+    var url = this.baseURL + '/tokens/' + this.authorization;
     try {
       yield httpClient.del({ url: url, json: false });
     } catch (err) {
       log.error(err);
     }
-    this.token = undefined;
+    this.authorization = undefined;
   };
 });
 
